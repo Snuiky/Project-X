@@ -1,0 +1,70 @@
+echo "# Project-X" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Snuiky/Project-X.git
+git push -u origin main
+import os
+
+# File to store tasks
+file_path = 'todo_list.txt'
+
+def load_tasks():
+    tasks = []
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as file:
+            tasks = [task.strip() for task in file.readlines()]
+    return tasks
+
+def save_tasks(tasks):
+    with open(file_path, 'w') as file:
+        file.write('\n'.join(tasks))
+
+def show_tasks():
+    tasks = load_tasks()
+    if tasks:
+        print("Todo List:")
+        for i, task in enumerate(tasks, 1):
+            print(f"{i}. {task}")
+    else:
+        print("Todo List is empty.")
+
+def add_task(task):
+    tasks = load_tasks()
+    tasks.append(task)
+    save_tasks(tasks)
+    print(f"New goal added: '{task}'.")
+
+def remove_task(index):
+    tasks = load_tasks()
+    if 1 <= index <= len(tasks):
+        removed_task = tasks.pop(index - 1)
+        save_tasks(tasks)
+        print(f"Completed goal: '{removed_task}'.")
+    else:
+        print("Invalid goal index.")
+
+# Main loop
+while True:
+    print("\nOptions:")
+    print("1. Show Goals")
+    print("2. Add Goal")
+    print("3. Complete Goal")
+    print("4. Quit")
+
+    choice = input("Enter your choice (1-4): ")
+
+    if choice == '1':
+        show_tasks()
+    elif choice == '2':
+        new_goal = input("Enter your new goal: ")
+        add_task(new_goal.lower())  # Save in lowercase
+    elif choice == '3':
+        goal_index = int(input("Enter the goal index you completed: "))
+        remove_task(goal_index)
+    elif choice == '4':
+        print("Goodbye! Keep striving for your goals.")
+        break
+    else:
+        print("Invalid choice. Please enter a number between 1 and 4.")
